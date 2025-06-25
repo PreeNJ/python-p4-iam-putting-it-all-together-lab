@@ -18,8 +18,7 @@ with app.app_context():
     fake = Faker()
 
     print("Creating users...")
-
-    # make sure users have unique usernames
+ 
     users = []
     usernames = []
 

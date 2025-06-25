@@ -6,8 +6,7 @@ from config import db, bcrypt
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
-
-    # Prevent recursive serialization and hide password hash
+ 
     serialize_rules = ('-recipes.user', '-_password_hash',)
 
     id = db.Column(db.Integer, primary_key=True)
@@ -15,8 +14,7 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String)
     image_url = db.Column(db.String)
     bio = db.Column(db.String)
-
-    # Relationship to recipes
+ 
     recipes = db.relationship('Recipe', back_populates='user', cascade="all, delete-orphan")
 
     @hybrid_property
@@ -44,19 +42,16 @@ class User(db.Model, SerializerMixin):
 
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
-    
-    # Prevent recursive serialization
+ 
     serialize_rules = ('-user.recipes',)
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     instructions = db.Column(db.String, nullable=False)
     minutes_to_complete = db.Column(db.Integer)
-
-    # Foreign Key to users table
+ 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-    # Relationship to user
+ 
     user = db.relationship('User', back_populates='recipes')
 
     @validates('instructions')
